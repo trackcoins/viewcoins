@@ -363,7 +363,6 @@
                 <img id="capturedImage" src="" alt="Live Coin Tracker" style="display: none;">
             </div>
             
-            <!-- Manual Refresh Button -->
             <div class="refresh-button-container">
                 <button class="refresh-button" id="refreshButton" style="display: none;">
                     <span>🔄</span> Refresh
@@ -380,84 +379,76 @@
     </div>
     
     <script>
-        // Disable ALL right-click context menu on the entire page
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         });
         
-        // Disable all keyboard shortcuts for developer tools
         document.addEventListener('keydown', function(e) {
-            // Disable F12
             if (e.key === 'F12' || e.keyCode === 123) {
                 e.preventDefault();
                 return false;
             }
-            
-            // Disable Ctrl+Shift+I (DevTools)
             if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.keyCode === 73)) {
                 e.preventDefault();
                 return false;
             }
-            
-            // Disable Ctrl+Shift+J (Console)
             if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.keyCode === 74)) {
                 e.preventDefault();
                 return false;
             }
-            
-            // Disable Ctrl+U (View Source)
             if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) {
                 e.preventDefault();
                 return false;
             }
-            
-            // Disable Ctrl+S (Save)
             if (e.ctrlKey && (e.key === 'S' || e.keyCode === 83)) {
                 e.preventDefault();
                 return false;
             }
-            
-            // Disable Ctrl+P (Print)
             if (e.ctrlKey && (e.key === 'P' || e.keyCode === 80)) {
                 e.preventDefault();
                 return false;
             }
         });
         
-        // Disable dragging images
         document.addEventListener('dragstart', function(e) {
             e.preventDefault();
             return false;
         });
         
-        // Disable selection
         document.addEventListener('selectstart', function(e) {
             e.preventDefault();
             return false;
         });
         
-        // Prevent viewing source via view-source: protocol
         if (window.location.protocol === 'view-source:') {
             window.location.href = 'about:blank';
         }
         
-        // Current code from this HTML
-        const validCode = "VWVH403H";
+        const allCodes = {"1": "NKJ6ZOZ7", "2": "FWIARAVQ", "3": "5HG8M4NN", "4": "A4WB90VW"};
+        const allImageUrls = {"1": ["https://lh3.googleusercontent.com/d/1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU=w1000", "https://drive.usercontent.google.com/download?id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU&export=view", "https://drive.google.com/thumbnail?id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU&sz=w1000", "https://drive.google.com/uc?export=view&id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU"], "2": ["https://lh3.googleusercontent.com/d/1-TcUrvPr0-2XLsrwh5txNIWYuXxQD3UR=w1000", "https://drive.usercontent.google.com/download?id=1-TcUrvPr0-2XLsrwh5txNIWYuXxQD3UR&export=view", "https://drive.google.com/thumbnail?id=1-TcUrvPr0-2XLsrwh5txNIWYuXxQD3UR&sz=w1000", "https://drive.google.com/uc?export=view&id=1-TcUrvPr0-2XLsrwh5txNIWYuXxQD3UR"], "3": ["https://lh3.googleusercontent.com/d/1AmI0QUc1Xo3PUM20yAY8ImzvFUTzbH-j=w1000", "https://drive.usercontent.google.com/download?id=1AmI0QUc1Xo3PUM20yAY8ImzvFUTzbH-j&export=view", "https://drive.google.com/thumbnail?id=1AmI0QUc1Xo3PUM20yAY8ImzvFUTzbH-j&sz=w1000", "https://drive.google.com/uc?export=view&id=1AmI0QUc1Xo3PUM20yAY8ImzvFUTzbH-j"], "4": ["https://lh3.googleusercontent.com/d/1T3E63AfsPhDSxknx3CBz9x-VKAz11eHK=w1000", "https://drive.usercontent.google.com/download?id=1T3E63AfsPhDSxknx3CBz9x-VKAz11eHK&export=view", "https://drive.google.com/thumbnail?id=1T3E63AfsPhDSxknx3CBz9x-VKAz11eHK&sz=w1000", "https://drive.google.com/uc?export=view&id=1T3E63AfsPhDSxknx3CBz9x-VKAz11eHK"]};
         const githubRawUrl = "https://raw.githubusercontent.com/princephonea2/coinview/main/index.html";
         const liveSiteUrl = "https://princephonea2.github.io/coinview/";
+        const versionId = "1773176348";
         
-        // Check localStorage for previous authorization
         const wasAuthorized = localStorage.getItem('trackerAuthorized') === 'true';
         const storedCode = localStorage.getItem('trackerCode');
+        const storedWindow = localStorage.getItem('trackerWindow');
         
-        // Multiple URL formats to try (hidden from user)
-        const imageUrls = [
-        "https://lh3.googleusercontent.com/d/1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU=w1000",
-        "https://drive.usercontent.google.com/download?id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU&export=view",
-        "https://drive.google.com/thumbnail?id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU&sz=w1000",
-        "https://drive.google.com/uc?export=view&id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU"
-    ];
+        let currentWindow = 1;
+        let validCode = allCodes[1];
+        
+        if (storedCode) {
+            for (let i = 1; i <= 4; i++) {
+                if (allCodes[i] === storedCode) {
+                    currentWindow = i;
+                    validCode = storedCode;
+                    break;
+                }
+            }
+        }
+        
+        let imageUrls = allImageUrls[currentWindow];
         
         let isAuthorized = false;
         if (storedCode === validCode && wasAuthorized) {
@@ -468,7 +459,6 @@
         let currentUrlIndex = 0;
         let loadAttempt = 0;
         
-        // Elements
         const codeInput = document.getElementById('codeInput');
         const goButton = document.getElementById('goButton');
         const placeholder = document.getElementById('placeholder');
@@ -477,12 +467,9 @@
         const imageContainer = document.getElementById('imageContainer');
         const refreshButton = document.getElementById('refreshButton');
         
-        // If previously authorized, restore session
         if (isAuthorized) {
             refreshButton.style.display = 'inline-flex';
             tryLoadImage(0);
-            
-            // Restore auto-refresh
             refreshInterval = setInterval(() => {
                 if (isAuthorized) {
                     tryLoadImage(currentUrlIndex);
@@ -490,30 +477,25 @@
             }, 30000);
         }
         
-        // Enable paste on mobile
         codeInput.addEventListener('touchstart', function() {
             this.focus();
         });
         
-        // Function to check GitHub for updated code
         async function checkForUpdatedCode() {
             try {
-                // Fetch the latest HTML from GitHub with cache busting
                 const response = await fetch(githubRawUrl + '?_=' + Date.now());
                 const latestHtml = await response.text();
                 
-                // Extract the validCode from the latest HTML
-                const codeMatch = latestHtml.match(/const validCode = "([A-Z0-9]+)"/);
-                
-                if (codeMatch && codeMatch[1] !== validCode) {
-                    // Code has changed - redirect to live site
-                    statusMessage.className = 'status-message status-error';
-                    statusMessage.textContent = '! New code detected, redirecting...';
-                    
-                    setTimeout(() => {
-                        window.location.href = liveSiteUrl + '?update=' + Date.now();
-                    }, 1500);
-                    return true;
+                for (let i = 1; i <= 4; i++) {
+                    const codeMatch = latestHtml.match(new RegExp(`allCodes = {.*?"${i}": "([A-Z0-9]+)"`));
+                    if (codeMatch && codeMatch[1] !== allCodes[i]) {
+                        statusMessage.className = 'status-message status-error';
+                        statusMessage.textContent = '! New code detected, redirecting...';
+                        setTimeout(() => {
+                            window.location.href = liveSiteUrl + '?update=' + Date.now();
+                        }, 1500);
+                        return true;
+                    }
                 }
                 return false;
             } catch (error) {
@@ -522,11 +504,9 @@
             }
         }
         
-        // Function to try loading image with different URLs
         async function tryLoadImage(startIndex = 0) {
             if (!isAuthorized) return;
             
-            // Check for updates before loading image
             const updated = await checkForUpdatedCode();
             if (updated) return;
             
@@ -535,7 +515,6 @@
             const random = Math.random().toString(36).substring(2, 15);
             
             if (startIndex >= imageUrls.length) {
-                // All URLs tried, give up
                 placeholder.textContent = '❌ Image not available';
                 statusMessage.className = 'status-message status-error';
                 statusMessage.textContent = '! Image not available';
@@ -565,7 +544,6 @@
             };
             
             newImage.onerror = function() {
-                // Try next URL silently
                 setTimeout(() => {
                     if (isAuthorized) {
                         tryLoadImage(startIndex + 1);
@@ -576,26 +554,21 @@
             newImage.src = imageUrl;
         }
         
-        // Handle refresh button click - THIS IS THE KEY FIX
         refreshButton.addEventListener('click', async function() {
             if (isAuthorized) {
                 statusMessage.className = 'status-message status-success';
                 statusMessage.textContent = '↻ Checking for updates...';
                 
-                // Check GitHub for updated code FIRST
                 const updated = await checkForUpdatedCode();
                 if (!updated) {
-                    // If no update, proceed with normal refresh
                     statusMessage.textContent = '↻ Refreshing image...';
                     tryLoadImage(0);
                 }
             }
         });
         
-        // Handle image click
         imageContainer.addEventListener('click', async function() {
             if (isAuthorized) {
-                // Check for updates first
                 const updated = await checkForUpdatedCode();
                 if (!updated) {
                     statusMessage.className = 'status-message status-success';
@@ -605,18 +578,29 @@
             }
         });
         
-        // Check code function
         function checkCode() {
             const enteredCode = codeInput.value.trim().toUpperCase();
             
-            if (enteredCode === validCode) {
+            let foundWindow = 0;
+            for (let i = 1; i <= 4; i++) {
+                if (enteredCode === allCodes[i]) {
+                    foundWindow = i;
+                    break;
+                }
+            }
+            
+            if (foundWindow > 0) {
                 isAuthorized = true;
+                currentWindow = foundWindow;
+                validCode = allCodes[foundWindow];
+                imageUrls = allImageUrls[foundWindow];
+                
                 loadAttempt = 0;
                 refreshButton.style.display = 'inline-flex';
                 
-                // Save authorization
                 localStorage.setItem('trackerAuthorized', 'true');
                 localStorage.setItem('trackerCode', validCode);
+                localStorage.setItem('trackerWindow', foundWindow);
                 
                 tryLoadImage(0);
                 
@@ -645,6 +629,8 @@
                 refreshButton.style.display = 'none';
                 
                 localStorage.removeItem('trackerAuthorized');
+                localStorage.removeItem('trackerCode');
+                localStorage.removeItem('trackerWindow');
                 
                 if (refreshInterval) {
                     clearInterval(refreshInterval);
@@ -663,7 +649,6 @@
             }
         }
         
-        // Event listeners
         goButton.addEventListener('click', checkCode);
         codeInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -675,28 +660,24 @@
             this.value = this.value.toUpperCase();
         });
         
-        // Clear input on page focus for security
         window.addEventListener('focus', function() {
             if (!isAuthorized) {
                 codeInput.value = '';
             }
         });
         
-        // Add cache-busting for the page itself
         window.onload = function() {
             if (history.replaceState) {
                 history.replaceState(null, null, location.href + '?_=' + Date.now());
             }
         };
         
-        // Periodically check for updates every 30 seconds
         setInterval(async function() {
             if (isAuthorized) {
                 await checkForUpdatedCode();
             }
         }, 30000);
         
-        // Check on page visibility change
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden && isAuthorized) {
                 checkForUpdatedCode();
