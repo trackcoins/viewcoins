@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- STRONG CACHE DISABLING META TAGS -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="referrer" content="no-referrer">
+    
+    <title>Track Your Coins - Live</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 700px;
+            padding: 25px 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .ball-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
+            border: 3px solid white;
+        }
+        
+        .ball-icon svg {
+            width: 45px;
+            height: 45px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .telegram-link {
+            color: #0088cc;
+            font-weight: 600;
+            text-decoration: none;
+            background: #e8f4fd;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .telegram-link:hover {
+            background: #0088cc;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .code-section {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .code-label {
+            font-size: 14px;
+            color: #495057;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .code-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .code-input {
+            width: 100%;
+            padding: 18px 15px;
+            font-size: 24px;
+            border: 3px solid #dee2e6;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 4px;
+            background: white;
+            transition: all 0.3s ease;
+            -webkit-user-select: text;
+            user-select: text;
+        }
+        
+        .code-input:focus {
+            outline: none;
+            border-color: #f39c12;
+            box-shadow: 0 0 0 4px rgba(243, 156, 18, 0.1);
+        }
+        
+        .go-button {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 18px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
+        }
+        
+        .go-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(243, 156, 18, 0.4);
+        }
+        
+        .go-button:active {
+            transform: translateY(0);
+        }
+        
+        .image-section {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .image-container {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 2px solid #dee2e6;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .image-container:hover {
+            transform: scale(1.01);
+            border-color: #f39c12;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        
+        .refresh-button-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0 5px;
+        }
+        
+        .refresh-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .refresh-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .refresh-button:active {
+            transform: translateY(0);
+        }
+        
+        .placeholder {
+            text-align: center;
+            padding: 80px 20px;
+            color: #adb5bd;
+            font-size: 18px;
+            background: #f1f3f5;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .status-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-error {
+            background: #fee;
+            color: #e74c3c;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #27ae60;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .refresh-info {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #95a5a6;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 12px;
+        }
+        
+        /* Prevent image dragging and context menu */
+        img {
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .code-input {
+                font-size: 20px;
+                padding: 15px;
+                letter-spacing: 2px;
+            }
+            
+            .go-button {
+                padding: 15px;
+                font-size: 18px;
+            }
+            
+            .ball-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .ball-icon svg {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .refresh-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="ball-icon">
+                <svg viewBox="0 0 24 24" fill="white">
+                    <circle cx="12" cy="12" r="10" fill="white"/>
+                    <path d="M12 2 L12 12 L18 8 L12 2" fill="#f39c12" opacity="0.8"/>
+                    <path d="M12 12 L18 8 L22 14 L12 12" fill="#e67e22" opacity="0.8"/>
+                    <circle cx="8" cy="8" r="2" fill="#2c3e50"/>
+                    <circle cx="16" cy="10" r="1.5" fill="#2c3e50"/>
+                </svg>
+            </div>
+            <h1>🎱 Track Your Coins - Live</h1>
+            <div class="subtitle">
+                <a href="https://t.me/pskgamesofficial" class="telegram-link" target="_blank" rel="noopener noreferrer">
+                    📱 Contact on Telegram : pskgamesofficial
+                </a>
+            </div>
+        </div>
+        
+        <div class="code-section">
+            <div class="code-label">Enter Access Code</div>
+            <div class="code-input-container">
+                <input type="text" class="code-input" id="codeInput" 
+                       placeholder="••••••••" maxlength="8" inputmode="text" autocomplete="off">
+                <button class="go-button" id="goButton">GO</button>
+            </div>
+        </div>
+        
+        <div class="image-section">
+            <div class="image-container" id="imageContainer">
+                <div class="placeholder" id="placeholder">✨ Enter code to view live coins</div>
+                <img id="capturedImage" src="" alt="Live Coin Tracker" style="display: none;">
+            </div>
+            
+            <!-- Manual Refresh Button -->
+            <div class="refresh-button-container">
+                <button class="refresh-button" id="refreshButton" style="display: none;">
+                    <span>🔄</span> Refresh
+                </button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            <div class="refresh-info">🔄 Auto-refreshes every 30 seconds | Click button to refresh</div>
+        </div>
+        
+        <div class="footer">
+            Secure Live Tracker • Code changes on restart
+        </div>
+    </div>
+    
+    <script>
+        // Disable ALL right-click context menu on the entire page
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Disable all keyboard shortcuts for developer tools
+        document.addEventListener('keydown', function(e) {
+            // Disable F12
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+I (DevTools)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.keyCode === 73)) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.keyCode === 74)) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+U (View Source)
+            if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+S (Save)
+            if (e.ctrlKey && (e.key === 'S' || e.keyCode === 83)) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+P (Print)
+            if (e.ctrlKey && (e.key === 'P' || e.keyCode === 80)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Disable dragging images
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Disable selection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Prevent viewing source via view-source: protocol
+        if (window.location.protocol === 'view-source:') {
+            window.location.href = 'about:blank';
+        }
+        
+        // Current code from this HTML
+        const validCode = "VWVH403H";
+        const githubRawUrl = "https://raw.githubusercontent.com/princephonea2/coinview/main/index.html";
+        const liveSiteUrl = "https://princephonea2.github.io/coinview/";
+        
+        // Check localStorage for previous authorization
+        const wasAuthorized = localStorage.getItem('trackerAuthorized') === 'true';
+        const storedCode = localStorage.getItem('trackerCode');
+        
+        // Multiple URL formats to try (hidden from user)
+        const imageUrls = [
+        "https://lh3.googleusercontent.com/d/1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU=w1000",
+        "https://drive.usercontent.google.com/download?id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU&export=view",
+        "https://drive.google.com/thumbnail?id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU&sz=w1000",
+        "https://drive.google.com/uc?export=view&id=1I1fN-1VAb89AsFudMQJwp1hY37QvdYdU"
+    ];
+        
+        let isAuthorized = false;
+        if (storedCode === validCode && wasAuthorized) {
+            isAuthorized = true;
+        }
+        
+        let refreshInterval = null;
+        let currentUrlIndex = 0;
+        let loadAttempt = 0;
+        
+        // Elements
+        const codeInput = document.getElementById('codeInput');
+        const goButton = document.getElementById('goButton');
+        const placeholder = document.getElementById('placeholder');
+        const capturedImage = document.getElementById('capturedImage');
+        const statusMessage = document.getElementById('statusMessage');
+        const imageContainer = document.getElementById('imageContainer');
+        const refreshButton = document.getElementById('refreshButton');
+        
+        // If previously authorized, restore session
+        if (isAuthorized) {
+            refreshButton.style.display = 'inline-flex';
+            tryLoadImage(0);
+            
+            // Restore auto-refresh
+            refreshInterval = setInterval(() => {
+                if (isAuthorized) {
+                    tryLoadImage(currentUrlIndex);
+                }
+            }, 30000);
+        }
+        
+        // Enable paste on mobile
+        codeInput.addEventListener('touchstart', function() {
+            this.focus();
+        });
+        
+        // Function to check GitHub for updated code
+        async function checkForUpdatedCode() {
+            try {
+                // Fetch the latest HTML from GitHub with cache busting
+                const response = await fetch(githubRawUrl + '?_=' + Date.now());
+                const latestHtml = await response.text();
+                
+                // Extract the validCode from the latest HTML
+                const codeMatch = latestHtml.match(/const validCode = "([A-Z0-9]+)"/);
+                
+                if (codeMatch && codeMatch[1] !== validCode) {
+                    // Code has changed - redirect to live site
+                    statusMessage.className = 'status-message status-error';
+                    statusMessage.textContent = '! New code detected, redirecting...';
+                    
+                    setTimeout(() => {
+                        window.location.href = liveSiteUrl + '?update=' + Date.now();
+                    }, 1500);
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.log('Update check failed:', error);
+                return false;
+            }
+        }
+        
+        // Function to try loading image with different URLs
+        async function tryLoadImage(startIndex = 0) {
+            if (!isAuthorized) return;
+            
+            // Check for updates before loading image
+            const updated = await checkForUpdatedCode();
+            if (updated) return;
+            
+            loadAttempt++;
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(2, 15);
+            
+            if (startIndex >= imageUrls.length) {
+                // All URLs tried, give up
+                placeholder.textContent = '❌ Image not available';
+                statusMessage.className = 'status-message status-error';
+                statusMessage.textContent = '! Image not available';
+                return;
+            }
+            
+            let baseUrl = imageUrls[startIndex];
+            const separator = baseUrl.includes('?') ? '&' : '?';
+            const imageUrl = baseUrl + separator + '_cb=' + timestamp + '&_r=' + random;
+            
+            const newImage = new Image();
+            
+            newImage.onload = function() {
+                capturedImage.src = this.src;
+                capturedImage.style.display = 'block';
+                placeholder.style.display = 'none';
+                currentUrlIndex = startIndex;
+                
+                statusMessage.className = 'status-message status-success';
+                statusMessage.textContent = '✓ Image updated';
+                
+                setTimeout(() => {
+                    if (statusMessage.textContent === '✓ Image updated') {
+                        statusMessage.textContent = '';
+                    }
+                }, 2000);
+            };
+            
+            newImage.onerror = function() {
+                // Try next URL silently
+                setTimeout(() => {
+                    if (isAuthorized) {
+                        tryLoadImage(startIndex + 1);
+                    }
+                }, 500);
+            };
+            
+            newImage.src = imageUrl;
+        }
+        
+        // Handle refresh button click - THIS IS THE KEY FIX
+        refreshButton.addEventListener('click', async function() {
+            if (isAuthorized) {
+                statusMessage.className = 'status-message status-success';
+                statusMessage.textContent = '↻ Checking for updates...';
+                
+                // Check GitHub for updated code FIRST
+                const updated = await checkForUpdatedCode();
+                if (!updated) {
+                    // If no update, proceed with normal refresh
+                    statusMessage.textContent = '↻ Refreshing image...';
+                    tryLoadImage(0);
+                }
+            }
+        });
+        
+        // Handle image click
+        imageContainer.addEventListener('click', async function() {
+            if (isAuthorized) {
+                // Check for updates first
+                const updated = await checkForUpdatedCode();
+                if (!updated) {
+                    statusMessage.className = 'status-message status-success';
+                    statusMessage.textContent = '↻ Refreshing...';
+                    tryLoadImage(currentUrlIndex);
+                }
+            }
+        });
+        
+        // Check code function
+        function checkCode() {
+            const enteredCode = codeInput.value.trim().toUpperCase();
+            
+            if (enteredCode === validCode) {
+                isAuthorized = true;
+                loadAttempt = 0;
+                refreshButton.style.display = 'inline-flex';
+                
+                // Save authorization
+                localStorage.setItem('trackerAuthorized', 'true');
+                localStorage.setItem('trackerCode', validCode);
+                
+                tryLoadImage(0);
+                
+                if (refreshInterval) clearInterval(refreshInterval);
+                refreshInterval = setInterval(() => {
+                    if (isAuthorized) {
+                        tryLoadImage(currentUrlIndex);
+                    }
+                }, 30000);
+                
+                statusMessage.className = 'status-message status-success';
+                statusMessage.textContent = '✓ Access granted';
+                
+                setTimeout(() => {
+                    if (statusMessage.textContent === '✓ Access granted') {
+                        statusMessage.textContent = '';
+                    }
+                }, 2000);
+                
+                codeInput.value = '';
+            } else {
+                isAuthorized = false;
+                capturedImage.style.display = 'none';
+                placeholder.style.display = 'block';
+                placeholder.textContent = '❌ Invalid code - access denied';
+                refreshButton.style.display = 'none';
+                
+                localStorage.removeItem('trackerAuthorized');
+                
+                if (refreshInterval) {
+                    clearInterval(refreshInterval);
+                    refreshInterval = null;
+                }
+                
+                statusMessage.className = 'status-message status-error';
+                statusMessage.textContent = '! Invalid access code';
+                
+                setTimeout(() => {
+                    if (statusMessage.textContent === '! Invalid access code') {
+                        statusMessage.textContent = '';
+                        placeholder.textContent = '✨ Enter code to view live coins';
+                    }
+                }, 3000);
+            }
+        }
+        
+        // Event listeners
+        goButton.addEventListener('click', checkCode);
+        codeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkCode();
+            }
+        });
+        
+        codeInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+        
+        // Clear input on page focus for security
+        window.addEventListener('focus', function() {
+            if (!isAuthorized) {
+                codeInput.value = '';
+            }
+        });
+        
+        // Add cache-busting for the page itself
+        window.onload = function() {
+            if (history.replaceState) {
+                history.replaceState(null, null, location.href + '?_=' + Date.now());
+            }
+        };
+        
+        // Periodically check for updates every 30 seconds
+        setInterval(async function() {
+            if (isAuthorized) {
+                await checkForUpdatedCode();
+            }
+        }, 30000);
+        
+        // Check on page visibility change
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && isAuthorized) {
+                checkForUpdatedCode();
+            }
+        });
+    </script>
+</body>
+</html>
